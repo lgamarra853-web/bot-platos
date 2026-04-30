@@ -27,9 +27,9 @@ const TURNO_POR_DIA = {
 };
 
 const MENSAJES = {
-  manana: (n) => 'Buenos dias ' + n + '! Recorda que hoy te toca lavar los platos.',
-  tarde:  (n) => 'Buenas tardes ' + n + '! No olvides que los platos de hoy son tu responsabilidad.',
-  noche:  (n) => 'Buenas noches ' + n + '! Antes de dormir... ya lavaste los platos?',
+  manana: (n) => '☀️ *¡Buenos días perre, ' + n + '!* Paso a recordarte que hoy te toca lavar los platos. 🍽️',
+  tarde:  (n) => '🌤️ *¡Buenas tardes perre, ' + n + '!* No te olvides que los platos de hoy son tu responsabilidad. 😊',
+  noche:  (n) => '🌙 *¡Buenas noches perre, ' + n + '!* Antes de dormir... ¿ya lavaste los platos? 😡😡',
 };
 
 app.get('/', async (req, res) => {
