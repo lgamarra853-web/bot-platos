@@ -76,7 +76,7 @@ async function enviarRecordatorio(momento) {
 }
 
 function iniciarRecordatorios() {
-  cron.schedule('0 8 * * *',  () => enviarRecordatorio('manana'), { timezone: 'America/Argentina/Buenos_Aires' });
+  cron.schedule('30 10 * * *',  () => enviarRecordatorio('manana'), { timezone: 'America/Argentina/Buenos_Aires' });
   cron.schedule('0 13 * * *', () => enviarRecordatorio('tarde'),  { timezone: 'America/Argentina/Buenos_Aires' });
   cron.schedule('0 21 * * *', () => enviarRecordatorio('noche'),  { timezone: 'America/Argentina/Buenos_Aires' });
   console.log('Recordatorios programados.');
