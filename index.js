@@ -27,14 +27,14 @@ const TURNO_POR_DIA = {
 };
 
 const MENSAJES = {
-  manana: (n) => `☀️ *¡Buenos días, ${n}!*\nRecordá que hoy te toca lavar los platos. 🍽️`,
-  tarde:  (n) => `🌤️ *¡Buenas tardes, ${n}!*\nNo olvides que los platos de hoy son tu responsabilidad. 😊`,
-  noche:  (n) => `🌙 *¡Buenas noches, ${n}!*\nAntes de dormir... ¿ya lavaste los platos? 🫧`,
+  manana: (n) => ` *¡Buenos días, ${n}!*\nRecordá que hoy te toca lavar los platos. `,
+  tarde:  (n) => ` *¡Buenas tardes, ${n}!*\nNo olvides que los platos de hoy son tu responsabilidad. `,
+  noche:  (n) => ` *¡Buenas noches, ${n}!*\nAntes de dormir... ¿ya lavaste los platos? `,
 };
 
 app.get('/', async (req, res) => {
   if (botListo) {
-    return res.send('<h2>✅ Bot conectado y funcionando</h2>');
+    return res.send('<h2> Bot conectado y funcionando</h2>');
   }
   if (qrImageUrl) {
     return res.send(`
@@ -45,10 +45,10 @@ app.get('/', async (req, res) => {
       </body></html>
     `);
   }
-  res.send('<h2>⏳ Iniciando bot, actualizá en unos segundos...</h2>');
+  res.send('<h2> Iniciando bot, actualizá en unos segundos...</h2>');
 });
 
-app.listen(PORT, () => console.log(`🌐 Servidor en puerto ${PORT}`));
+app.listen(PORT, () => console.log(` Servidor en puerto ${PORT}`));
 
 const client = new Client({
   authStrategy: new LocalAuth(),
@@ -58,13 +58,13 @@ const client = new Client({
 client.on('qr', async (qr) => {
   qrcode.generate(qr, { small: true });
   qrImageUrl = await QRCode.toDataURL(qr);
-  console.log('📱 QR listo en el navegador');
+  console.log(' QR listo en el navegador');
 });
 
 client.on('ready', () => {
   botListo = true;
   qrImageUrl = null;
-  console.log('✅ Bot conectado y listo!');
+  console.log(' Bot conectado y listo!');
   iniciarRecordatorios();
 });
 
