@@ -18,7 +18,7 @@ const HERMANOS = {
 
 const TURNO_POR_DIA = {
   0: null,
-  1: 'Benjamin,
+  1: 'Benjamin',
   2: 'Florencia',
   3: 'Micaela',
   4: 'Benjamin',
@@ -27,28 +27,22 @@ const TURNO_POR_DIA = {
 };
 
 const MENSAJES = {
-  manana: (n) => ` *¡Buenos días, ${n}!*\nRecordá que hoy te toca lavar los platos. `,
-  tarde:  (n) => ` *¡Buenas tardes, ${n}!*\nNo olvides que los platos de hoy son tu responsabilidad. `,
-  noche:  (n) => ` *¡Buenas noches, ${n}!*\nAntes de dormir... ¿ya lavaste los platos? `,
+  manana: (n) => 'Buenos dias ' + n + '! Recorda que hoy te toca lavar los platos.',
+  tarde:  (n) => 'Buenas tardes ' + n + '! No olvides que los platos de hoy son tu responsabilidad.',
+  noche:  (n) => 'Buenas noches ' + n + '! Antes de dormir... ya lavaste los platos?',
 };
 
 app.get('/', async (req, res) => {
   if (botListo) {
-    return res.send('<h2> Bot conectado y funcionando</h2>');
+    return res.send('<h2>Bot conectado y funcionando</h2>');
   }
   if (qrImageUrl) {
-    return res.send(`
-      <html><body style="text-align:center;font-family:sans-serif">
-        <h2>Escaneá este QR con WhatsApp</h2>
-        <img src="${qrImageUrl}" style="width:300px"/>
-        <p>Actualizá la página si el QR expiró</p>
-      </body></html>
-    `);
+    return res.send('<html><body style="text-align:center;font-family:sans-serif"><h2>Escaneá este QR con WhatsApp</h2><img src="' + qrImageUrl + '" style="width:300px"/><p>Actualizá la página si el QR expiró</p></body></html>');
   }
-  res.send('<h2> Iniciando bot, actualizá en unos segundos...</h2>');
+  res.send('<h2>Iniciando bot, actualizá en unos segundos...</h2>');
 });
 
-app.listen(PORT, () => console.log(` Servidor en puerto ${PORT}`));
+app.listen(PORT, () => console.log('Servidor en puerto ' + PORT));
 
 const client = new Client({
   authStrategy: new LocalAuth(),
@@ -58,13 +52,13 @@ const client = new Client({
 client.on('qr', async (qr) => {
   qrcode.generate(qr, { small: true });
   qrImageUrl = await QRCode.toDataURL(qr);
-  console.log(' QR listo en el navegador');
+  console.log('QR listo en el navegador');
 });
 
 client.on('ready', () => {
   botListo = true;
   qrImageUrl = null;
-  console.log(' Bot conectado y listo!');
+  console.log('Bot conectado y listo!');
   iniciarRecordatorios();
 });
 
@@ -74,4 +68,18 @@ async function enviarRecordatorio(momento) {
   if (!nombre) return;
   const mensaje = MENSAJES[momento](nombre);
   try {
-    aw
+    await client.sendMessage(HERMANOS[nombre] + '@c.us', mensaje);
+    console.log('Mensaje enviado a ' + nombre);
+  } catch (err) {
+    console.error('Error:', err.message);
+  }
+}
+
+function iniciarRecordatorios() {
+  cron.schedule('0 8 * * *',  () => enviarRecordatorio('manana'), { timezone: 'America/Argentina/Buenos_Aires' });
+  cron.schedule('0 13 * * *', () => enviarRecordatorio('tarde'),  { timezone: 'America/Argentina/Buenos_Aires' });
+  cron.schedule('0 21 * * *', () => enviarRecordatorio('noche'),  { timezone: 'America/Argentina/Buenos_Aires' });
+  console.log('Recordatorios programados.');
+}
+
+client.initialize();
